@@ -1,14 +1,8 @@
 # Дипломный проект профессии «Инженер по тестированию»
 ## Предварительные условия:
-1. Установить и открыть Android Studio
+1. Установить и открыть Android Studio```https://developer.android.com/studio```
 
-```https://developer.android.com/studio```
-
-
-2. Склонировать репозиторий
-
-https://github.com/Baduk98/diplom.git
-
+2. Склонировать репозиторий https://github.com/Baduk98/diplom.git
 
 3. Установить приложение на мобильное устройство/эмулятор.
 
