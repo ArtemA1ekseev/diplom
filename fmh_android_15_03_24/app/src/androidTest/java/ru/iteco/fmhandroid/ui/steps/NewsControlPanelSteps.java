@@ -1,4 +1,3 @@
-// NewsControlPanelSteps.java
 package ru.iteco.fmhandroid.ui.steps;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -13,27 +12,16 @@ import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtP
 import static ru.iteco.fmhandroid.ui.data.DataHelper.waitDisplayed;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.withIndex;
 import static ru.iteco.fmhandroid.ui.data.TestConstants.NewsTexts.*;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getEmptyDescription;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getEmptyTitle;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getFutureDate;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getInvalidDate;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getInvalidTime;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getLongDescription;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getLongTitle;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getSpecialCharactersDescription;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getSpecialCharactersTitle;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsCategory;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsDate;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsDescription;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsTime;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsTitle;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.*;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
-
 import io.qameta.allure.kotlin.Allure;
 import ru.iteco.fmhandroid.ui.data.MyViewAction;
 import ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage;
 
+/**
+ * Steps для панели управления новостями
+ */
 public class NewsControlPanelSteps {
 
     private final NewsControlPanelPage page = new NewsControlPanelPage();

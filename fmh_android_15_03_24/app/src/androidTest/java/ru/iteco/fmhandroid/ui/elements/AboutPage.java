@@ -10,19 +10,23 @@ import androidx.test.espresso.ViewInteraction;
 
 import ru.iteco.fmhandroid.R;
 
+/**
+ * Страница "О приложении"
+ */
 public class AboutPage {
 
-    public ViewInteraction getABoutElementButtonAbout;
-    public ViewInteraction getABoutElementButtonPrivacyPolicy;
-    public ViewInteraction getABoutElementButtonTermsOfUse;
-    public ViewInteraction getPressBackButton;
+    public ViewInteraction aboutButton;
+    public ViewInteraction privacyPolicyText;
+    public ViewInteraction termsOfUseText;
+    public ViewInteraction navigateUpButton;
 
     public AboutPage() {
-        getABoutElementButtonAbout = onView(allOf(withId(android.R.id.title), withText("About")));
-
-        getABoutElementButtonPrivacyPolicy = onView(withId(R.id.about_privacy_policy_value_text_view));
-
-        getABoutElementButtonTermsOfUse = onView(withId(R.id.about_terms_of_use_value_text_view));
-        getPressBackButton = onView(withContentDescription("Navigate up"));
+        aboutButton = onView(allOf(
+                withId(android.R.id.title),
+                withText("About")
+        ));
+        privacyPolicyText = onView(withId(R.id.about_privacy_policy_value_text_view));
+        termsOfUseText = onView(withId(R.id.about_terms_of_use_value_text_view));
+        navigateUpButton = onView(withContentDescription("Navigate up"));
     }
 }

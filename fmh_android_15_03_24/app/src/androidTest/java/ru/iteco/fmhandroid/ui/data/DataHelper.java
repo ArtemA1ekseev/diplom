@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import android.view.View;
 
 import androidx.test.espresso.PerformException;
+import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.util.HumanReadables;
 import androidx.test.espresso.util.TreeIterables;
@@ -19,24 +20,37 @@ import java.util.concurrent.TimeoutException;
 
 public class DataHelper {
 
+    /**
+     * Возвращает матчер, который выбирает вью по порядковому индексу среди всех подходящих.
+     */
     public static Matcher<View> withIndex(final Matcher<View> matcher, final int index) {
         return new TypeSafeMatcher<View>() {
             int currentIndex = 0;
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("with index: ");
-                description.appendValue(index);
+                description.appendText("with index: ")
+                        .appendValue(index)
+                        .appendText(" ");
                 matcher.describeTo(description);
             }
 
             @Override
-            public boolean matchesSafely(View view) {
-                return matcher.matches(view) && currentIndex++ == index;
+            protected boolean matchesSafely(View view) {
+                if (matcher.matches(view)) {
+                    if (currentIndex == index) {
+                        return true;
+                    }
+                    currentIndex++;
+                }
+                return false;
             }
         };
     }
 
+    /**
+     * Ждёт появления и отображения вью с указанным ID в течение millis миллисекунд.
+     */
     public static ViewAction waitDisplayed(final int viewId, final long millis) {
         return new ViewAction() {
             @Override
@@ -46,32 +60,31 @@ public class DataHelper {
 
             @Override
             public String getDescription() {
-                return "wait for a specific view with id <" + viewId + "> has been displayed during " + millis + " millis.";
+                return "wait up to " + millis + " ms for view with id <" + viewId + "> to be displayed.";
             }
 
             @Override
-            public void perform(androidx.test.espresso.UiController uiController, View view) {
+            public void perform(UiController uiController, View rootView) {
                 uiController.loopMainThreadUntilIdle();
-                final long startTime = System.currentTimeMillis();
-                final long endTime = startTime + millis;
-                final Matcher<View> matchId = withId(viewId);
-                final Matcher<View> matchDisplayed = isDisplayed();
+                long startTime = System.currentTimeMillis();
+                long endTime = startTime + millis;
+
+                Matcher<View> idMatcher = withId(viewId);
+                Matcher<View> displayMatcher = isDisplayed();
 
                 do {
-                    for (View child : TreeIterables.breadthFirstViewTraversal(view)) {
-                        if (matchId.matches(child) && matchDisplayed.matches(child)) {
-                            return;
+                    for (View child : TreeIterables.breadthFirstViewTraversal(rootView)) {
+                        if (idMatcher.matches(child) && displayMatcher.matches(child)) {
+                            return; // найден и отображён — выходим
                         }
                     }
-
                     uiController.loopMainThreadForAtLeast(50);
-                }
-                while (System.currentTimeMillis() < endTime);
+                } while (System.currentTimeMillis() < endTime);
 
-                // timeout happens
+                // Если таймаут, выбрасываем исключение с понятным описанием
                 throw new PerformException.Builder()
-                        .withActionDescription(this.getDescription())
-                        .withViewDescription(HumanReadables.describe(view))
+                        .withActionDescription(getDescription())
+                        .withViewDescription(HumanReadables.describe(rootView))
                         .withCause(new TimeoutException())
                         .build();
             }

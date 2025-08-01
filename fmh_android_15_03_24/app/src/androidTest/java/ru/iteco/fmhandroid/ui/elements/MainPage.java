@@ -9,27 +9,30 @@ import androidx.test.espresso.ViewInteraction;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.data.TestConstants;
 
+/**
+ * Главная страница приложения
+ */
 public class MainPage {
 
     // ViewInteraction элементы
-    public ViewInteraction allNewsButton;
-    public ViewInteraction mainMenuButton;
-    public ViewInteraction newsTitle;
-    public ViewInteraction expandNewsButton;
+    public final ViewInteraction allNewsButtonInteraction;
+    public final ViewInteraction mainMenuButtonInteraction;
+    public final ViewInteraction newsTitleInteraction;
+    public final ViewInteraction expandNewsButtonInteraction;
 
-    // ID элементы для Steps
-    public int allNewsButtonId;
-    public int mainMenuButtonId;
-    public int newsTitleId;
-    public int expandNewsButtonId;
-    public int containerListNewsId;
+    // ID элементов для Steps
+    public final int allNewsButtonId;
+    public final int mainMenuButtonId;
+    public final int newsTitleId;
+    public final int expandNewsButtonId;
+    public final int containerListNewsId;
 
     public MainPage() {
         // Инициализация ViewInteraction элементов
-        allNewsButton = onView(withText(TestConstants.NewsTexts.ALL_NEWS));
-        mainMenuButton = onView(withId(R.id.main_menu_image_button));
-        newsTitle = onView(withText(TestConstants.NewsTexts.NEWS_TITLE));
-        expandNewsButton = onView(withId(R.id.expand_material_button));
+        allNewsButtonInteraction = onView(withId(R.id.all_news_text_view));
+        mainMenuButtonInteraction = onView(withId(R.id.main_menu_image_button));
+        newsTitleInteraction = onView(withText(TestConstants.NewsTexts.NEWS_TITLE));
+        expandNewsButtonInteraction = onView(withId(R.id.expand_material_button));
 
         // Инициализация ID элементов
         allNewsButtonId = R.id.all_news_text_view;
@@ -46,6 +49,14 @@ public class MainPage {
 
     public int getMainMenuButtonId() {
         return mainMenuButtonId;
+    }
+
+    public int getNewsTitleId() {
+        return newsTitleId;
+    }
+
+    public int getExpandNewsButtonId() {
+        return expandNewsButtonId;
     }
 
     public int getContainerListNewsId() {

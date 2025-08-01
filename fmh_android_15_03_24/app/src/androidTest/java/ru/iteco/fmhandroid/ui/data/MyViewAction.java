@@ -1,12 +1,13 @@
 package ru.iteco.fmhandroid.ui.data;
 
-import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.hamcrest.Matcher;
 
@@ -17,6 +18,7 @@ public class MyViewAction {
 
     /**
      * Создает ViewAction для клика по дочернему элементу с определенным ID
+     *
      * @param id ID дочернего элемента для клика
      * @return ViewAction для выполнения клика
      */
@@ -24,19 +26,22 @@ public class MyViewAction {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
-                return null;
+                // Ограничение: родительский view должен быть отображён
+                return isDisplayed();
             }
 
             @Override
             public String getDescription() {
-                return "Click on a child view with specified id.";
+                return "Click on a child view with id: " + id;
             }
 
             @Override
             public void perform(UiController uiController, View view) {
-                View v = view.findViewById(id);
-                if (v != null) {
-                    v.performClick();
+                View child = view.findViewById(id);
+                if (child != null && child.isEnabled()) {
+                    child.performClick();
+                } else {
+                    throw new RuntimeException("Child view with id " + id + " not found or not enabled");
                 }
             }
         };
@@ -44,43 +49,51 @@ public class MyViewAction {
 
     /**
      * ViewAction для получения текста из TextView
-     * @param stringHolder массив для хранения полученного текста
+     *
+     * @param stringHolder массив для хранения полученного текста (должен быть длиной >=1)
      * @return ViewAction для получения текста
      */
     public static ViewAction getText(final String[] stringHolder) {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
-                return isAssignableFrom(android.widget.TextView.class);
+                // Только TextView и наследники
+                return isDisplayed();
             }
 
             @Override
             public String getDescription() {
-                return "getting text from a TextView";
+                return "Get text from a TextView";
             }
 
             @Override
             public void perform(UiController uiController, View view) {
-                android.widget.TextView tv = (android.widget.TextView) view;
-                stringHolder[0] = tv.getText().toString();
+                if (view instanceof TextView) {
+                    TextView tv = (TextView) view;
+                    stringHolder[0] = tv.getText().toString();
+                } else {
+                    throw new RuntimeException("The view is not a TextView");
+                }
             }
         };
     }
 
     /**
      * ViewAction для длительного нажатия на элемент
+     *
      * @return ViewAction для длительного нажатия
      */
     public static ViewAction longClick() {
         return new ViewAction() {
             @Override
             public Matcher<View> getConstraints() {
-                return ViewMatchers.isEnabled();
+                // Элемент должен быть включён и отображён
+                return isEnabled();
             }
 
             @Override
             public String getDescription() {
-                return "long click";
+                return "Long click on view";
             }
 
             @Override

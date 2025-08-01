@@ -9,29 +9,29 @@ import static org.hamcrest.Matchers.allOf;
 import io.qameta.allure.kotlin.Allure;
 import ru.iteco.fmhandroid.ui.elements.ThematicQuotePage;
 
+/**
+ * Steps для вкладки "Тематические цитаты"
+ */
 public class ThematicQuoteSteps {
 
-    ThematicQuotePage thematicQuotePage = new ThematicQuotePage();
+    private final ThematicQuotePage page = new ThematicQuotePage();
 
     public void clickButtonThematicQuote() {
-        Allure.step("На главной странице экрана приложения нажать на кнопку Бабочка (Тематические цитаты).");
-        thematicQuotePage.getQuoteElementButtonThematicQuote
-                .perform(click());
+        Allure.step("Нажать на кнопку Тематические цитаты на главной странице");
+        page.missionButton.perform(click());
     }
 
     public void checkTitleThematicQuote() {
-        Allure.step("Проверить заголовок Love is all на вкладке Тематические цитаты.");
-        thematicQuotePage.getQuoteElementTitleThematicQuote
-                .check(matches(allOf(withText("Love is all"), isDisplayed())));
+        Allure.step("Проверить заголовок 'Love is all' на вкладке Тематические цитаты");
+        page.missionTitle.check(matches(allOf(withText("Love is all"), isDisplayed())));
     }
 
     public void clickButtonToExpandThematicQuote() {
-        Allure.step("Нажать на кнопку развернуть тематическую цитату.");
-        thematicQuotePage.getQuoteElementButtonToExpandThematicQuote
-                .perform(click());
+        Allure.step("Нажать на кнопку развернуть тематическую цитату");
+        page.expandMissionButton.perform(click());
     }
 
-    public int getMissionImageButton() {
-        return thematicQuotePage.missionImageButton;
+    public int getMissionImageButtonId() {
+        return page.missionImageButtonId;
     }
 }

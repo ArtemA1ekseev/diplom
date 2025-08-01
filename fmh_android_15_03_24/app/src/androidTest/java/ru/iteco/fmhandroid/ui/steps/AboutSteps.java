@@ -5,33 +5,30 @@ import static androidx.test.espresso.action.ViewActions.click;
 import io.qameta.allure.kotlin.Allure;
 import ru.iteco.fmhandroid.ui.elements.AboutPage;
 
+/**
+ * Steps для взаимодействия со страницей "О приложении"
+ */
 public class AboutSteps {
-    AboutPage aboutPage = new AboutPage();
+
+    private final AboutPage aboutPage = new AboutPage();
 
     public void clickButtonAboutMainMenu() {
-        Allure.step("Нажать кнопку О приложении (About) в Главном меню");
-        aboutPage.getABoutElementButtonAbout
-                .perform(click());
+        Allure.step("Нажать на кнопку About в главном меню");
+        aboutPage.aboutButton.perform(click());
     }
 
     public void clickButtonPrivacyPolicy() {
-        Allure.step(" Нажать на ссылку Политика конфиденциальности (Privacy policy).");
-        aboutPage.getABoutElementButtonPrivacyPolicy
-                .perform(click());
+        Allure.step("Нажать на ссылку Privacy Policy");
+        aboutPage.privacyPolicyText.perform(click());
     }
 
     public void clickButtonTermsOfUse() {
-        Allure.step("Нажать на ссылку Пользовательское соглашение (Terms of use).");
-        aboutPage.getABoutElementButtonTermsOfUse
-                .perform(click());
+        Allure.step("Нажать на ссылку Terms of Use");
+        aboutPage.termsOfUseText.perform(click());
     }
 
-    public void clickButtonPressBack() {
-        Allure.step("Нажать на ссылку Пользовательское соглашение (Terms of use).");
-        aboutPage.getPressBackButton.
-                perform(click());
+    public void clickButtonNavigateUp() {
+        Allure.step("Нажать кнопку Navigate up для возврата назад");
+        aboutPage.navigateUpButton.perform(click());
     }
-
-
 }
-

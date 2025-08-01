@@ -1,10 +1,10 @@
 package ru.iteco.fmhandroid.ui.tests;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.waitDisplayed;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.withIndex;
 import static ru.iteco.fmhandroid.ui.steps.AuthorizationSteps.getLogin;
@@ -30,12 +30,12 @@ import ru.iteco.fmhandroid.ui.steps.ThematicQuoteSteps;
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
-@Epic("Тест-кейсы для проведения функционального тестирования вкладки \"Тематические цитаты\" мобильного приложения \"Мобильный хоспис\".")
+@Epic("Тест-кейсы функционального тестирования вкладки \"Тематические цитаты\" мобильного приложения \"Мобильный хоспис\"")
 public class ThematicQuoteTest {
 
-    AuthorizationSteps authorizationSteps = new AuthorizationSteps();
-    ThematicQuoteSteps thematicQuoteSteps = new ThematicQuoteSteps();
-    MainSteps mainSteps = new MainSteps();
+    private final AuthorizationSteps authSteps = new AuthorizationSteps();
+    private final ThematicQuoteSteps thematicSteps = new ThematicQuoteSteps();
+    private final MainSteps mainSteps = new MainSteps();
 
     @Rule
     public ActivityScenarioRule<AppActivity> activityRule =
@@ -44,25 +44,26 @@ public class ThematicQuoteTest {
     @Before
     public void setUp() {
         try {
-            // ИСПРАВЛЕНО: заменено на существующий метод
             mainSteps.showTitleNewsOnMain();
         } catch (Exception e) {
-            authorizationSteps.fillLoginField(getLogin());
-            authorizationSteps.fillPasswordField(getPassword());
-            authorizationSteps.clickButtonSignIn();
+            authSteps.fillLoginField(getLogin());
+            authSteps.fillPasswordField(getPassword());
+            authSteps.clickButtonSignIn();
             mainSteps.showTitleNewsOnMain();
         }
     }
 
-    // ТC - 52 - Развернуть/свернуть тематическую цитату, во вкладке "Love is all", мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
-    @Story("TC - 52")
-    @Description("Развернуть/свернуть тематическую цитату, во вкладке \"Love is all\", мобильного приложения \"Мобильный хоспис\" (Позитивный).")
-    public void expandThematicQuote() {
-        onView(isRoot()).perform(waitDisplayed(thematicQuoteSteps.getMissionImageButton(), 5000));
-        thematicQuoteSteps.clickButtonThematicQuote();
-        thematicQuoteSteps.checkTitleThematicQuote();
-        thematicQuoteSteps.clickButtonToExpandThematicQuote();
-        onView(withIndex(withId(R.id.our_mission_item_description_text_view), 0)).check(matches(isDisplayed()));
+    @Story("TC-52")
+    @Description("Развернуть и свернуть тематическую цитату на вкладке \"Love is all\" (Позитивный)")
+    public void expandCollapseThematicQuote() {
+        onView(isRoot())
+                .perform(waitDisplayed(thematicSteps.getMissionImageButtonId(), 5000));
+        thematicSteps.clickButtonThematicQuote();
+        thematicSteps.checkTitleThematicQuote();
+        thematicSteps.clickButtonToExpandThematicQuote();
+        onView(withIndex(
+                withId(R.id.our_mission_item_description_text_view), 0))
+                .check(matches(isDisplayed()));
     }
 }

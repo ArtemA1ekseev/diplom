@@ -57,11 +57,10 @@ public final class TestConstants {
         public static final String LOG_OUT = "Log out";
         public static final String SAVE = "Save";
         public static final String OK = "OK";
-        public static final String NEWS = "News";  // ДОБАВЛЕНО
-        public static final String ALL_NEWS_UPPER = "ALL NEWS";  // ДОБАВЛЕНО
+        public static final String NEWS = "News";
+        public static final String ALL_NEWS_UPPER = "ALL NEWS";
     }
 
-    // ДОБАВЛЕНО: Данные для авторизации
     public static final class LoginData {
         public static final String RIGHT_LOGIN = "login2";
         public static final String RIGHT_PASSWORD = "password2";
@@ -75,13 +74,12 @@ public final class TestConstants {
         public static final String DIFFERENT_REGEX_PASSWORD = "PassWord2";
     }
 
-    // ДОБАВЛЕНО: Данные для новостей
     public static final class NewsData {
         public static final String VALID_NEWS_TITLE = "Тестовая новость для автотестов";
         public static final String VALID_NEWS_DESCRIPTION = "Описание тестовой новости для проверки функциональности";
-        public static final String VALID_NEWS_CATEGORY = "Объявление";
-        public static final String VALID_NEWS_DATE = "03.12.2024";
-        public static final String VALID_NEWS_TIME = "14:30";
+        public static final String VALID_NEWS_CATEGORY = Categories.ANNOUNCEMENT;
+        public static final String VALID_NEWS_DATE = TestDates.TEST_DATE;
+        public static final String VALID_NEWS_TIME = TestDates.TEST_TIME;
         public static final String EMPTY_TITLE = "";
         public static final String EMPTY_DESCRIPTION = "";
         public static final String LONG_TITLE = "Очень длинный заголовок новости который превышает максимально допустимое количество символов для поля заголовка и должен вызвать ошибку валидации при попытке сохранения такой новости в системе управления контентом";

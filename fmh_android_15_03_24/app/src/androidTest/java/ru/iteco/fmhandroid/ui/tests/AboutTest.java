@@ -1,6 +1,7 @@
 package ru.iteco.fmhandroid.ui.tests;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
@@ -31,11 +32,12 @@ import ru.iteco.fmhandroid.ui.steps.MainSteps;
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
-@Epic("Тест-кейсы для проведения функционального тестирования вкладки \"О приложении\" (About) мобильного приложения \"Мобильный хоспис\".")
+@Epic("Тест-кейсы для функционального тестирования вкладки \"О приложении\" мобильного приложения \"Мобильный хоспис\"")
 public class AboutTest {
-    AuthorizationSteps authorizationSteps = new AuthorizationSteps();
-    AboutSteps aboutSteps = new AboutSteps();
-    MainSteps mainSteps = new MainSteps();
+
+    private final AuthorizationSteps authorizationSteps = new AuthorizationSteps();
+    private final AboutSteps aboutSteps = new AboutSteps();
+    private final MainSteps mainSteps = new MainSteps();
 
     @Rule
     public IntentsTestRule<AppActivity> intentsTestRule =
@@ -44,7 +46,6 @@ public class AboutTest {
     @Before
     public void setUp() {
         try {
-            // ИСПРАВЛЕНО: заменено на существующий метод
             mainSteps.showTitleNewsOnMain();
         } catch (Exception e) {
             authorizationSteps.fillLoginField(getLogin());
@@ -56,34 +57,32 @@ public class AboutTest {
 
     @After
     public void tearDown() {
-        aboutSteps.clickButtonPressBack();
+        pressBack();
     }
 
-    // TC - 53 - Просмотр ссылки "Политика конфиденциальности" (Privacy policy) во вкладке "О приложении" (About) мобильного приложения "Мобильный хоспис"(Позитивный).
     @Test
-    @Story("TC - 53")
-    @Description("Просмотр ссылки \"Политика конфиденциальности\" (Privacy policy) во вкладке \"О приложении\" (About) мобильного приложения \"Мобильный хоспис\" (Позитивный)")
+    @Story("TC-53")
+    @Description("Просмотр ссылки \"Политика конфиденциальности\" (Privacy policy) во вкладке \"О приложении\" (About)")
     public void watchingPrivacyPolicy() {
-        // ИСПРАВЛЕНО: используем правильные методы
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        onView(isRoot())
+                .perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
         mainSteps.clickMainMenuButton();
         aboutSteps.clickButtonAboutMainMenu();
         aboutSteps.clickButtonPrivacyPolicy();
-        intended(hasData("https://vhospice.org/#/privacy-policy/")); // Проверка Intent
+        intended(hasData("https://vhospice.org/#/privacy-policy/"));
         intended(hasAction(Intent.ACTION_VIEW));
     }
 
-    // TC - 54 - Просмотр ссылки "Пользовательское соглашение" (Terms of use) во вкладке "О приложении" (About) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
-    @Story("TC - 54")
-    @Description("Просмотр ссылки \"Пользовательское соглашение\" (Terms of use) во вкладке \"О приложении\" (About) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
+    @Story("TC-54")
+    @Description("Просмотр ссылки \"Пользовательское соглашение\" (Terms of use) во вкладке \"О приложении\" (About)")
     public void watchingTermsOfUse() {
-        // ИСПРАВЛЕНО: используем правильные методы
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        onView(isRoot())
+                .perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
         mainSteps.clickMainMenuButton();
         aboutSteps.clickButtonAboutMainMenu();
         aboutSteps.clickButtonTermsOfUse();
-        intended(hasData("https://vhospice.org/#/terms-of-use")); // Проверка Intent
+        intended(hasData("https://vhospice.org/#/terms-of-use"));
         intended(hasAction(Intent.ACTION_VIEW));
     }
 }

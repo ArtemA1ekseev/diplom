@@ -11,53 +11,57 @@ import androidx.test.espresso.Espresso;
 import io.qameta.allure.kotlin.Allure;
 import ru.iteco.fmhandroid.ui.elements.MainPage;
 
+/**
+ * Steps для взаимодействия с главной страницей
+ */
 public class MainSteps {
 
     private final MainPage mainPage = new MainPage();
 
     public void clickAllNews() {
         Allure.step("Нажать на кнопку 'Все новости'");
-        mainPage.allNewsButton.perform(click());
+        mainPage.allNewsButtonInteraction.perform(click());
     }
 
     public void clickMainMenuButton() {
         Allure.step("Нажать на кнопку главного меню");
-        mainPage.mainMenuButton.perform(click());
+        mainPage.mainMenuButtonInteraction.perform(click());
     }
 
     public void showTitleNewsOnMain() {
         Allure.step("Отобразился заголовок новостей на главной странице");
-        mainPage.newsTitle.check(matches(isDisplayed()));
+        mainPage.newsTitleInteraction.check(matches(isDisplayed()));
     }
 
     public void clickExpandNewsButton() {
         Allure.step("Нажать на кнопку разворачивания новостей");
-        mainPage.expandNewsButton.perform(click());
+        mainPage.expandNewsButtonInteraction.perform(click());
     }
 
     public void waitForContainerListNews(int timeout) {
         Allure.step("Ожидание контейнера списка новостей");
-        Espresso.onView(isRoot()).perform(waitDisplayed(mainPage.getContainerListNewsId(), timeout));
+        Espresso.onView(isRoot())
+                .perform(waitDisplayed(mainPage.getContainerListNewsId(), timeout));
     }
 
     public void waitForAllNewsButton(int timeout) {
         Allure.step("Ожидание кнопки 'Все новости'");
-        Espresso.onView(isRoot()).perform(waitDisplayed(mainPage.getAllNewsButtonId(), timeout));
+        Espresso.onView(isRoot())
+                .perform(waitDisplayed(mainPage.getAllNewsButtonId(), timeout));
     }
 
     public void showButtonAllNews() {
-        Allure.step("Показать кнопку 'Все новости'");
-        mainPage.allNewsButton.check(matches(isDisplayed()));
+        Allure.step("Проверить отображение кнопки 'Все новости'");
+        mainPage.allNewsButtonInteraction.check(matches(isDisplayed()));
     }
 
     public void clickButtonAllNews() {
-        Allure.step("Нажать на кнопку 'Все новости'");
+        Allure.step("Нажать на кнопку 'Все новости' (alias)");
         clickAllNews();
     }
 
-    // Исправлено: возврат на главную через Back
     public void clickButtonMain() {
-        Allure.step("Возврат на главную страницу");
+        Allure.step("Возврат на главную страницу через Back");
         Espresso.pressBack();
     }
 
@@ -69,7 +73,7 @@ public class MainSteps {
         return mainPage.getMainMenuButtonId();
     }
 
-    public int getButtonToExpandNews() {
+    public int getExpandNewsButtonId() {
         return mainPage.getExpandNewsButtonId();
     }
 }
