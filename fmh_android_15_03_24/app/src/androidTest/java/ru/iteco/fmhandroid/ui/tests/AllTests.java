@@ -110,15 +110,13 @@ public class AllTests {
     // TC - 12 - Переход на вкладку "Главная страница" (Main) через главное меню мобильного приложения "Мобильный хоспис"(Позитивный).
     @Test
     @Story("TC - 12")
-    @Description("Переход на вкладку \"Главная страница\" (Main) через главное меню мобильного приложения \"Мобильный хоспис\" (Позитивный).")
+    @Description("Переход на вкладку \"Главная страница\" через главное меню")
     public void Main() {
-        // ИСПРАВЛЕНО: используем правильные методы без вызова несуществующего clickButtonMain
         onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
         mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
-
-        // ИСПРАВЛЕНО: возвращаемся на главную страницу через Back вместо несуществующего метода
+        // Возврат на главную через Back вместо несуществующего метода
         pressBack();
         onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
     }

@@ -58,11 +58,9 @@ public class MainSteps {
 
     // ДОБАВЛЕНО: Недостающий метод clickButtonMain
     public void clickButtonMain() {
-        Allure.step("Нажать на кнопку 'Главная'");
-        // Предполагается что есть mainButton в MainPage
-        // mainPage.mainButton.perform(click());
-        // Если кнопки нет, можно использовать навигацию через главное меню
-        clickAllNews(); // временная заглушка
+        Allure.step("Возврат на главную страницу");
+        // системная навигация Back
+        Espresso.pressBack();
     }
 
     // Методы для получения ID элементов
