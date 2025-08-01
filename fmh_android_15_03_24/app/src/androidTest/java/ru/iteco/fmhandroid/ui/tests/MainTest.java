@@ -10,7 +10,6 @@ import static ru.iteco.fmhandroid.ui.data.DataHelper.waitDisplayed;
 import static ru.iteco.fmhandroid.ui.steps.AuthorizationSteps.getLogin;
 import static ru.iteco.fmhandroid.ui.steps.AuthorizationSteps.getPassword;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 
@@ -19,20 +18,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import io.qameta.allure.android.runners.AllureAndroidJUnit4;  // ИСПРАВЛЕНО: раскомментировано
 import io.qameta.allure.kotlin.Description;
 import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Story;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.AppActivity;
+import ru.iteco.fmhandroid.ui.data.TestConstants;  // ДОБАВЛЕНО: импорт констант
 import ru.iteco.fmhandroid.ui.steps.AuthorizationSteps;
 import ru.iteco.fmhandroid.ui.steps.MainSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsSteps;
 
-
 @LargeTest
-@RunWith(AndroidJUnit4.class)
-//@RunWith(AllureAndroidJUnit4.class)
-
+@RunWith(AllureAndroidJUnit4.class)  // ИСПРАВЛЕНО: используем Allure runner
 @Epic("Тест-кейсы для проведения функционального тестирования вкладки \"Главная страница\" (Main) мобильного приложения \"Мобильный хоспис\".")
 public class MainTest {
 
@@ -56,9 +54,9 @@ public class MainTest {
         }
     }
 
-// Тест-кейсы для проведения функционального тестирования вкладки "Главная" (Main) мобильного приложения "Мобильный хоспис".
+    // Тест-кейсы для проведения функционального тестирования вкладки "Главная" (Main) мобильного приложения "Мобильный хоспис".
 
-    //   TC - 12 - Переход на вкладку "Главная страница" (Main) через главное меню мобильного приложения "Мобильный хоспис"(Позитивный).
+    // TC - 12 - Переход на вкладку "Главная страница" (Main) через главное меню мобильного приложения "Мобильный хоспис"(Позитивный).
     @Test
     @Story("TC - 12")
     @Description("Переход на вкладку \"Главная страница\" (Main) через главное меню мобильного приложения \"Мобильный хоспис\" (Позитивный).")
@@ -66,20 +64,22 @@ public class MainTest {
         onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
         mainSteps.clickButtonMainMenu();
         newsSteps.clickButtonNews();
-        onView(withText("News")).check(matches(isDisplayed()));
+        // ИСПРАВЛЕНО: используем константы вместо магических строк
+        onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
         mainSteps.clickButtonMainMenu();
         mainSteps.clickButtonMain();
-        onView(withText("News")).check(matches(isDisplayed()));
+        onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
     }
 
-    //  ТС - 13 - Свернуть/развернуть вкладку "Новости" (News)  на  вкладке "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // ТС - 13 - Свернуть/развернуть вкладку "Новости" (News) на вкладке "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 13")
-    @Description("Свернуть/развернуть вкладку \"Новости\" (News)  на  вкладке \"Главная страница\" (Main) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
+    @Description("Свернуть/развернуть вкладку \"Новости\" (News) на вкладке \"Главная страница\" (Main) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void extendNews() {
         onView(isRoot()).perform(waitDisplayed(mainSteps.getButtonToExpandNews(), 5000));
         mainSteps.clickButtonToExpandNews();
         mainSteps.clickButtonToExpandNews();
-        onView(withId(R.id.all_news_text_view)).check(matches(withText("ALL NEWS")));
+        // ИСПРАВЛЕНО: используем константы вместо магических строк
+        onView(withId(R.id.all_news_text_view)).check(matches(withText(TestConstants.CommonTexts.ALL_NEWS_UPPER)));
     }
 }

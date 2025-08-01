@@ -6,6 +6,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.waitDisplayed;
 import static ru.iteco.fmhandroid.ui.elements.AuthorizationPage.differentRegexLogin;
 import static ru.iteco.fmhandroid.ui.elements.AuthorizationPage.differentRegexPassword;
@@ -32,26 +33,22 @@ public class AuthorizationSteps {
 
     public void clickButtonSignIn() {
         Allure.step("Нажать на кнопку Войти");
-        authorizationPage.getAuthorizationElementsButton
-                .perform(click());
+        authorizationPage.getAuthorizationElementsButton.perform(click());
     }
 
     public void clickButtonExit() {
         Allure.step("Нажать на кнопку Выход");
-        authorizationPage.getAuthorizationElementsButtonExit
-                .perform(click());
+        authorizationPage.getAuthorizationElementsButtonExit.perform(click());
     }
 
     public void clickButtonLogOut() {
         Allure.step("Нажать на кнопку для выхода из приложения");
-        authorizationPage.getAuthorizationElementsButtonLogOut
-                .perform(click());
+        authorizationPage.getAuthorizationElementsButtonLogOut.perform(click());
     }
 
     public void textAuthorization() {
-        Allure.step("Отобразилаcь страница Авторизации");
-        authorizationPage.getAuthorizationElementsTextAuthorization
-                .check(matches(isDisplayed()));
+        Allure.step("Отобразилась страница Авторизации");
+        authorizationPage.getAuthorizationElementsTextAuthorization.check(matches(isDisplayed()));
     }
 
     public void fillLoginField(String text) {
@@ -64,6 +61,31 @@ public class AuthorizationSteps {
         authorizationPage.getAuthorizationElementsPasswordField.perform(replaceText(text));
     }
 
+    // Методы для получения ID элементов (убираем прямые ссылки из тестов)
+    public int getAuthorizationImageButtonId() {
+        return authorizationPage.authorizationImageButton;
+    }
+
+    public int getLoginLayoutId() {
+        return authorizationPage.loginLayout;
+    }
+
+    public int getEnterButtonId() {
+        return authorizationPage.enterButton;
+    }
+
+    // Методы для ожидания элементов по ID
+    public void waitForAuthorizationImageButton(int timeout) {
+        Allure.step("Ожидание кнопки авторизации");
+        onView(isRoot()).perform(waitDisplayed(getAuthorizationImageButtonId(), timeout));
+    }
+
+    public void waitForLoginLayout(int timeout) {
+        Allure.step("Ожидание поля логина");
+        onView(isRoot()).perform(waitDisplayed(getLoginLayoutId(), timeout));
+    }
+
+    // Методы для получения данных
     public static String getLogin() {
         return rightLogin;
     }
@@ -107,6 +129,4 @@ public class AuthorizationSteps {
     public int getLoginLayout() {
         return authorizationPage.loginLayout;
     }
-
-
 }

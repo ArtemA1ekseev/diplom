@@ -1,308 +1,379 @@
 package ru.iteco.fmhandroid.ui.steps;
 
-import static androidx.test.espresso.action.ViewActions.clearText;
+import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.categoryAdvertisement;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.categoryBirthday;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.categoryCelebration;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.categoryGratitude;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.categoryNeedHelp;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.categorySalary;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.categoryUnion;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.customCategory;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.customCategoryDescription;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.customCategoryTitle;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionAdvertisement;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionBirthday;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionBirthdayEdit;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionDonations;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionGratitude;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionGratitudeDonations;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionNeedHelp;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionSalary;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionSalaryEnumerated;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.descriptionUnion;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.numbersCategory;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.numbersCategoryDescription;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.numbersCategoryTitle;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.specialCharactersCategory;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.specialCharactersCategoryDescription;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.specialCharactersCategoryTitle;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleAdvertisement;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleBirthdayEdit;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleCelebration;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleDonations;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleGratitude;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleGratitudeDonations;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleNeedHelp;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleSalary;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleSalaryEnumerated;
-import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.titleUnion;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static ru.iteco.fmhandroid.ui.data.DataHelper.waitDisplayed;
+import static ru.iteco.fmhandroid.ui.data.DataHelper.withIndex;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getEmptyDescription;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getEmptyTitle;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getFutureDate;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getInvalidDate;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getInvalidTime;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getLongDescription;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getLongTitle;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getPastDate;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getSpecialCharactersDescription;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getSpecialCharactersTitle;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsCategory;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsDate;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsDescription;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsTime;
+import static ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage.getValidNewsTitle;
+
+import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import io.qameta.allure.kotlin.Allure;
+import ru.iteco.fmhandroid.ui.data.TestConstants;
+import ru.iteco.fmhandroid.ui.data.MyViewAction; // ИСПРАВЛЕНО: добавлен импорт
 import ru.iteco.fmhandroid.ui.elements.NewsControlPanelPage;
 
+/**
+ * Класс Steps для работы с панелью управления новостями
+ * Содержит все методы для взаимодействия с UI элементами
+ */
 public class NewsControlPanelSteps {
 
     NewsControlPanelPage newsControlPanelPage = new NewsControlPanelPage();
 
-    public void clickButtonControlPanel() {
-        Allure.step("Нажать на кнопку Панель управления");
-        newsControlPanelPage.getNewsControlPanelElementsButtonControlPanel
-                .perform(click());
+    public void loadNewsControlPanelPage() {
+        Allure.step("Загрузка страницы управления новостями");
+        onView(isRoot()).perform(waitDisplayed(newsControlPanelPage.getAddNewsButtonId(), 5000));
     }
 
-    public void clickAddNews() {
-        Allure.step("Нажать на кнопку Добавить новость");
-        newsControlPanelPage.getNewsControlPanelElementsAddNews
-                .perform(click());
+    public void waitForNewsControlPanelTitle(int timeout) {
+        Allure.step("Ожидание заголовка панели управления новостями");
+        onView(isRoot()).perform(waitDisplayed(newsControlPanelPage.newsControlPanelTitleId, timeout));
     }
 
-
-    public void fillTitleCreatingNews(String text) {
-        Allure.step("Ввести в поле Заголовок заголовок новости");
-        newsControlPanelPage.getNewsControlPanelElementsButtonTitleCreatingNews
-                .perform(click(), clearText(), replaceText(text), closeSoftKeyboard());
+    public void waitForAddNewsButton(int timeout) {
+        Allure.step("Ожидание кнопки добавления новости");
+        onView(isRoot()).perform(waitDisplayed(newsControlPanelPage.getAddNewsButtonId(), timeout));
     }
 
-    public void clickButtonDateCreatingNews() {
-        Allure.step("В поле Дата публикации выбрать дату по календарю");
-        newsControlPanelPage.getNewsControlPanelElementsButtonDateCreatingNews
-                .perform(click());
+    public void waitForNewsRecyclerView(int timeout) {
+        Allure.step("Ожидание списка новостей");
+        onView(isRoot()).perform(waitDisplayed(newsControlPanelPage.getNewsRecyclerViewId(), timeout));
     }
 
-    public void clickButtonOkDateCreatingNews() {
-        Allure.step("Нажать кнопку ОК Дата");
-        newsControlPanelPage.getNewsControlPanelElementsButtonOkDateCreatingNews
-                .perform(click());
+    public void clickAddNewsButton() {
+        Allure.step("Нажать на кнопку добавления новости");
+        newsControlPanelPage.addNewsButton.perform(click());
     }
 
-    public void clickButtonTimeCreatingNews() {
-        Allure.step("В поле Время выбрать время");
-        newsControlPanelPage.getNewsControlPanelElementsButtonTimeCreatingNews
-                .perform(click());
+    public void clickEditButton() {
+        Allure.step("Нажать на кнопку редактирования новости");
+        newsControlPanelPage.editButton.perform(click());
     }
 
-    public void clickButtonOkTimeCreatingNews() {
-        Allure.step("Нажать кнопку ОК Время");
-        newsControlPanelPage.getNewsControlPanelElementsButtonOkTimeCreatingNews
-                .perform(click());
+    public void clickDeleteButton() {
+        Allure.step("Нажать на кнопку удаления новости");
+        newsControlPanelPage.deleteButton.perform(click());
     }
 
-    public void fillDescriptionCreatingNews(String text) {
-        Allure.step("Ввести в поле Описание описание новости");
-        newsControlPanelPage.getNewsControlPanelElementsDescriptionCreatingNews
-                .perform(replaceText(text), closeSoftKeyboard());
+    public void clickSortButton() {
+        Allure.step("Нажать на кнопку сортировки новостей");
+        newsControlPanelPage.sortButton.perform(click());
     }
 
-    public void clickButtonSaveCreatingNews() {
-        Allure.step("Нажать на кнопку Сохранить новость");
-        newsControlPanelPage.getNewsControlPanelElementsButtonSaveCreatingNews
-                .perform(scrollTo(), click());
+    public void clickFilterButton() {
+        Allure.step("Нажать на кнопку фильтрации новостей");
+        newsControlPanelPage.filterButton.perform(click());
     }
 
-
-    public void fillInNewsCategoryField(String text) {
-        Allure.step("Поле категория - ввод данных");
-        newsControlPanelPage.getNewsControlPanelElementsCategoryText.perform(click(), clearText(), replaceText(text), closeSoftKeyboard());
+    public void clickSaveButton() {
+        Allure.step("Нажать на кнопку сохранения");
+        newsControlPanelPage.saveButton.perform(click());
     }
 
-    static String nextYear = "15.04.2026";
-
-    public void clickButtonDateCreatingNextDate() {
-        Allure.step("В поле Дата публикации выбрать дату будущего года");
-        newsControlPanelPage.getNewsControlPanelElementsButtonDateCreatingNews
-                .perform(replaceText(nextYear));
+    public void clickCancelButton() {
+        Allure.step("Нажать на кнопку отмены");
+        newsControlPanelPage.cancelButton.perform(click());
     }
 
-    public void manualInputTime() {
-        Allure.step("Вручную ввести время публикации новости");
-        newsControlPanelPage.getNewsControlPanelElementsInputTime
-                .perform(click());
+    public void clickConfirmDeleteButton() {
+        Allure.step("Подтвердить удаление новости");
+        newsControlPanelPage.confirmDeleteButton.perform(click());
     }
 
-    public void clickButtonSortingNews() {
-        Allure.step("Нажать кнопку Сортировать новости в Панели управления");
-        newsControlPanelPage.getNewsControlPanelElementsButtonSortingControlPanel
-                .perform(click());
+    public void fillTitleField(String title) {
+        Allure.step("Заполнить поле заголовка: " + title);
+        newsControlPanelPage.titleField.perform(replaceText(title));
     }
 
-    public void clickButtonToExpandNews() {
-        Allure.step("Нажать кнопку Развернуть новость в Панели управления");
-        newsControlPanelPage.getNewsControlPanelElementsButtonToExpandNews
-                .perform(click());
+    public void fillDescriptionField(String description) {
+        Allure.step("Заполнить поле описания: " + description);
+        newsControlPanelPage.descriptionField.perform(replaceText(description));
     }
 
-    public void clickButtonToDeleteNews() {
-        Allure.step("Нажать кнопку Удалить новость в Панели управления");
-        newsControlPanelPage.getNewsControlPanelElementsButtonToDeleteNews
-                .perform(click());
+    public void selectCategory(String category) {
+        Allure.step("Выбрать категорию: " + category);
+        newsControlPanelPage.categoryDropdown.perform(click());
+        onView(withText(category)).perform(click());
     }
 
-    public void clickButtonToOkDeleteNews() {
-        Allure.step("Нажать кнопку ОК Удалить новость в Панели управления");
-        newsControlPanelPage.getNewsControlPanelElementsButtonToOkDeleteNews
-                .perform(click());
+    public void fillDateField(String date) {
+        Allure.step("Заполнить поле даты: " + date);
+        newsControlPanelPage.dateField.perform(replaceText(date));
     }
 
-    public void clickButtonToEditNews() {
-        Allure.step("Нажать кнопку Редактировать новость в Панели управления");
-        newsControlPanelPage.getNewsControlPanelElementsButtonToEditNews
-                .perform(click());
+    public void fillTimeField(String time) {
+        Allure.step("Заполнить поле времени: " + time);
+        newsControlPanelPage.timeField.perform(replaceText(time));
     }
 
-    public void clickButtonToSwitchStatusNews() {
-        Allure.step("Сменить статус Активная на статус Не активна (передвинуть рычажок).");
-        newsControlPanelPage.getNewsControlPanelElementsButtonToSwitchStatusNews
-                .perform(click());
+    public void toggleActiveSwitch() {
+        Allure.step("Переключить статус активности новости");
+        newsControlPanelPage.switcherActive.perform(click());
     }
 
-    public static String getCategoryAdvertisement() {
-        return categoryAdvertisement;
+    public void clickOnNewsItem(int position) {
+        Allure.step("Нажать на новость в позиции: " + position);
+        onView(withId(newsControlPanelPage.getNewsRecyclerViewId()))
+                .perform(actionOnItemAtPosition(position, click()));
     }
 
-    public static String getTitleAdvertisement() {
-        return titleAdvertisement;
+    public void clickEditButtonOnNewsItem(int position) {
+        Allure.step("Нажать на кнопку редактирования новости в позиции: " + position);
+        onView(withId(newsControlPanelPage.getNewsRecyclerViewId()))
+                .perform(actionOnItemAtPosition(position,
+                        MyViewAction.clickChildViewWithId(newsControlPanelPage.getEditButtonId())));
     }
 
-    public static String getDescriptionAdvertisement() {
-        return descriptionAdvertisement;
+    public void clickDeleteButtonOnNewsItem(int position) {
+        Allure.step("Нажать на кнопку удаления новости в позиции: " + position);
+        onView(withId(newsControlPanelPage.getNewsRecyclerViewId()))
+                .perform(actionOnItemAtPosition(position,
+                        MyViewAction.clickChildViewWithId(newsControlPanelPage.getDeleteButtonId())));
     }
 
-    public static String getCategorySalary() {
-        return categorySalary;
+    public void checkNewsTitle(int index, String expectedTitle) {
+        Allure.step("Проверить заголовок новости в позиции " + index + ": " + expectedTitle);
+        onView(withIndex(withId(newsControlPanelPage.getNewsItemTitleId()), index))
+                .check(matches(withText(expectedTitle)));
     }
 
-    public static String getTitleSalary() {
-        return titleSalary;
+    public void checkNewsDescription(int index, String expectedDescription) {
+        Allure.step("Проверить описание новости в позиции " + index + ": " + expectedDescription);
+        onView(withIndex(withId(newsControlPanelPage.getNewsItemDescriptionId()), index))
+                .check(matches(withText(expectedDescription)));
     }
 
-    public static String getDescriptionSalary() {
-        return descriptionSalary;
+    public void checkNewsDate(int index, String expectedDate) {
+        Allure.step("Проверить дату новости в позиции " + index + ": " + expectedDate);
+        onView(withIndex(withId(newsControlPanelPage.getNewsItemDateId()), index))
+                .check(matches(withText(expectedDate)));
     }
 
-    public static String getTitleDonations() {
-        return titleDonations;
+    public void checkPoolConstructionNews() {
+        Allure.step("Проверить новость о строительстве бассейна");
+        checkNewsDescription(0, TestConstants.NewsTexts.DESCRIPTION_POOL_CONSTRUCTION);
     }
 
-    public static String getDescriptionDonations() {
-        return descriptionDonations;
+    public void checkSalaryAdvanceNews() {
+        Allure.step("Проверить новость о перечислении аванса");
+        checkNewsDescription(1, TestConstants.NewsTexts.DESCRIPTION_SALARY_ADVANCE);
     }
 
-    public static String getCategoryBirthday() {
-        return categoryBirthday;
+    public void checkDonationsNews() {
+        Allure.step("Проверить новость о пожертвованиях");
+        checkNewsDescription(2, TestConstants.NewsTexts.DESCRIPTION_DONATIONS);
     }
 
-    public static String getDescriptionBirthday() {
-        return descriptionBirthday;
+    public void checkVisitNews() {
+        Allure.step("Проверить новость о посещении");
+        checkNewsDescription(3, TestConstants.NewsTexts.DESCRIPTION_VISIT);
     }
 
-    public static String getTitleSalaryEnumerated() {
-        return titleSalaryEnumerated;
+    public void checkAnniversaryNews() {
+        Allure.step("Проверить новость о юбилее");
+        checkNewsDescription(4, TestConstants.NewsTexts.DESCRIPTION_ANNIVERSARY);
     }
 
-    public static String getDescriptionSalaryEnumerated() {
-        return descriptionSalaryEnumerated;
+    public void verifyNewsControlPanelIsDisplayed() {
+        Allure.step("Проверить отображение панели управления новостями");
+        newsControlPanelPage.newsControlPanelTitle.check(matches(isDisplayed()));
     }
 
-    public static String getCategoryUnion() {
-        return categoryUnion;
+    public void verifyAddNewsButtonIsDisplayed() {
+        Allure.step("Проверить отображение кнопки добавления новости");
+        newsControlPanelPage.addNewsButton.check(matches(isDisplayed()));
     }
 
-    public static String getTitleUnion() {
-        return titleUnion;
+    public void verifySortButtonIsDisplayed() {
+        Allure.step("Проверить отображение кнопки сортировки");
+        newsControlPanelPage.sortButton.check(matches(isDisplayed()));
     }
 
-    public static String getDescriptionUnion() {
-        return descriptionUnion;
+    public void verifyFilterButtonIsDisplayed() {
+        Allure.step("Проверить отображение кнопки фильтрации");
+        newsControlPanelPage.filterButton.check(matches(isDisplayed()));
     }
 
-    public static String getCategoryCelebration() {
-        return categoryCelebration;
+    public void verifyNewsListIsDisplayed() {
+        Allure.step("Проверить отображение списка новостей");
+        newsControlPanelPage.newsRecyclerView.check(matches(isDisplayed()));
     }
 
-    public static String getTitleCelebration() {
-        return titleCelebration;
+    public void createValidNews() {
+        Allure.step("Создать валидную новость с тестовыми данными");
+        clickAddNewsButton();
+        fillTitleField(getValidNewsTitle());
+        fillDescriptionField(getValidNewsDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getValidNewsDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getCustomCategory() {
-        return customCategory;
+    public void createNewsWithEmptyTitle() {
+        Allure.step("Попытаться создать новость с пустым заголовком");
+        clickAddNewsButton();
+        fillTitleField(getEmptyTitle());
+        fillDescriptionField(getValidNewsDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getValidNewsDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getCustomCategoryTitle() {
-        return customCategoryTitle;
+    public void createNewsWithEmptyDescription() {
+        Allure.step("Попытаться создать новость с пустым описанием");
+        clickAddNewsButton();
+        fillTitleField(getValidNewsTitle());
+        fillDescriptionField(getEmptyDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getValidNewsDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getCustomCategoryDescription() {
-        return customCategoryDescription;
+    public void createNewsWithLongTitle() {
+        Allure.step("Попытаться создать новость со слишком длинным заголовком");
+        clickAddNewsButton();
+        fillTitleField(getLongTitle());
+        fillDescriptionField(getValidNewsDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getValidNewsDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getNumbersCategory() {
-        return numbersCategory;
+    public void createNewsWithLongDescription() {
+        Allure.step("Попытаться создать новость со слишком длинным описанием");
+        clickAddNewsButton();
+        fillTitleField(getValidNewsTitle());
+        fillDescriptionField(getLongDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getValidNewsDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getNumbersCategoryTitle() {
-        return numbersCategoryTitle;
+    public void createNewsWithSpecialCharacters() {
+        Allure.step("Попытаться создать новость со спецсимволами");
+        clickAddNewsButton();
+        fillTitleField(getSpecialCharactersTitle());
+        fillDescriptionField(getSpecialCharactersDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getValidNewsDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getNumbersCategoryDescription() {
-        return numbersCategoryDescription;
+    public void createNewsWithFutureDate() {
+        Allure.step("Создать новость с будущей датой");
+        clickAddNewsButton();
+        fillTitleField(getValidNewsTitle());
+        fillDescriptionField(getValidNewsDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getFutureDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getSpecialCharactersCategory() {
-        return specialCharactersCategory;
+    public void createNewsWithPastDate() {
+        Allure.step("Создать новость с прошедшей датой");
+        clickAddNewsButton();
+        fillTitleField(getValidNewsTitle());
+        fillDescriptionField(getValidNewsDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getPastDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getSpecialCharactersCategoryTitle() {
-        return specialCharactersCategoryTitle;
+    public void createNewsWithInvalidDate() {
+        Allure.step("Попытаться создать новость с некорректной датой");
+        clickAddNewsButton();
+        fillTitleField(getValidNewsTitle());
+        fillDescriptionField(getValidNewsDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getInvalidDate());
+        fillTimeField(getValidNewsTime());
+        clickSaveButton();
     }
 
-    public static String getSpecialCharactersCategoryDescription() {
-        return specialCharactersCategoryDescription;
+    public void createNewsWithInvalidTime() {
+        Allure.step("Попытаться создать новость с некорректным временем");
+        clickAddNewsButton();
+        fillTitleField(getValidNewsTitle());
+        fillDescriptionField(getValidNewsDescription());
+        selectCategory(getValidNewsCategory());
+        fillDateField(getValidNewsDate());
+        fillTimeField(getInvalidTime());
+        clickSaveButton();
     }
 
-    public static String getCategoryGratitude() {
-        return categoryGratitude;
+    public void sortNewsByDate() {
+        Allure.step("Отсортировать новости по дате");
+        clickSortButton();
+        waitForNewsRecyclerView(2000);
     }
 
-    public static String getTitleGratitude() {
-        return titleGratitude;
+    public void filterActiveNews() {
+        Allure.step("Отфильтровать активные новости");
+        clickFilterButton();
+        onView(withText(TestConstants.NewsTexts.NOT_ACTIVE_SWITCHER)).perform(click());
+        waitForNewsRecyclerView(2000);
     }
 
-    public static String getDescriptionGratitude() {
-        return descriptionGratitude;
+    public void filterInactiveNews() {
+        Allure.step("Отфильтровать неактивные новости");
+        clickFilterButton();
+        onView(withText(TestConstants.NewsTexts.NOT_ACTIVE)).perform(click());
+        waitForNewsRecyclerView(2000);
     }
 
-    public static String getCategoryNeedHelp() {
-        return categoryNeedHelp;
+    public int getAddNewsButtonId() {
+        return newsControlPanelPage.getAddNewsButtonId();
     }
 
-    public static String getTitleNeedHelp() {
-        return titleNeedHelp;
+    public int getNewsRecyclerViewId() {
+        return newsControlPanelPage.getNewsRecyclerViewId();
     }
 
-    public static String getDescriptionNeedHelp() {
-        return descriptionNeedHelp;
+    public int getSaveButtonId() {
+        return newsControlPanelPage.getSaveButtonId();
     }
 
-    public static String getTitleGratitudeDonations() {
-        return titleGratitudeDonations;
+    public void scrollToNewsItem(int position) {
+        Allure.step("Прокрутить к новости в позиции: " + position);
+        onView(withId(newsControlPanelPage.getNewsRecyclerViewId()))
+                .perform(RecyclerViewActions.scrollToPosition(position));
     }
 
-    public static String getDescriptionGratitudeDonations() {
-        return descriptionGratitudeDonations;
-    }
-
-    public static String getTitleBirthdayEdit() {
-        return titleBirthdayEdit;
-    }
-
-    public static String getDescriptionBirthdayEdit() {
-        return descriptionBirthdayEdit;
+    public void scrollToAndClickNewsItem(int position) {
+        Allure.step("Прокрутить к новости и нажать на неё в позиции: " + position);
+        scrollToNewsItem(position);
+        clickOnNewsItem(position);
     }
 }
-
-
