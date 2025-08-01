@@ -2,62 +2,22 @@ package ru.iteco.fmhandroid.ui.tests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 import static ru.iteco.fmhandroid.ui.data.DataHelper.waitDisplayed;
-import static ru.iteco.fmhandroid.ui.data.DataHelper.withIndex;
 import static ru.iteco.fmhandroid.ui.steps.AuthorizationSteps.getLogin;
 import static ru.iteco.fmhandroid.ui.steps.AuthorizationSteps.getPassword;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCategoryAdvertisement;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCategoryBirthday;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCategoryCelebration;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCategoryGratitude;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCategoryNeedHelp;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCategorySalary;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCategoryUnion;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCustomCategory;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCustomCategoryDescription;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getCustomCategoryTitle;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionAdvertisement;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionBirthday;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionBirthdayEdit;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionDonations;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionGratitude;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionGratitudeDonations;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionNeedHelp;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionSalary;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionSalaryEnumerated;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getDescriptionUnion;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getNumbersCategory;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getNumbersCategoryDescription;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getNumbersCategoryTitle;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getSpecialCharactersCategory;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getSpecialCharactersCategoryDescription;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getSpecialCharactersCategoryTitle;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleAdvertisement;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleBirthdayEdit;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleCelebration;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleDonations;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleGratitude;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleGratitudeDonations;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleNeedHelp;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleSalary;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleSalaryEnumerated;
-import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleUnion;
+import static org.hamcrest.Matchers.allOf;
 
 import android.view.View;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -65,36 +25,30 @@ import org.junit.runner.RunWith;
 
 import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Description;
-import io.qameta.allure.kotlin.Flaky;
 import io.qameta.allure.kotlin.Story;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.AppActivity;
 import ru.iteco.fmhandroid.ui.data.TestConstants;
 import ru.iteco.fmhandroid.ui.steps.AuthorizationSteps;
 import ru.iteco.fmhandroid.ui.steps.MainSteps;
-import ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsSteps;
-import ru.iteco.fmhandroid.ui.steps.ThematicQuoteSteps;
 
 @LargeTest
 @RunWith(AllureAndroidJUnit4.class)
 public class AllTests {
 
-    AuthorizationSteps authorizationSteps = new AuthorizationSteps();
-    MainSteps mainSteps = new MainSteps();
-    NewsSteps newsSteps = new NewsSteps();
-    NewsControlPanelSteps newsControlPanelSteps = new NewsControlPanelSteps();
-    ThematicQuoteSteps thematicQuoteSteps = new ThematicQuoteSteps();
+    private final AuthorizationSteps authorizationSteps = new AuthorizationSteps();
+    private final MainSteps mainSteps = new MainSteps();
+    private final NewsSteps newsSteps = new NewsSteps();
+    private View decorView;
 
     @Rule
     public ActivityScenarioRule<AppActivity> activityScenarioRule =
             new ActivityScenarioRule<>(AppActivity.class);
-    private View decorView;
 
     @Before
     public void setUp() {
         try {
-            // ИСПРАВЛЕНО: заменено на существующий метод
             mainSteps.showTitleNewsOnMain();
         } catch (Exception e) {
             authorizationSteps.fillLoginField(getLogin());
@@ -102,23 +56,24 @@ public class AllTests {
             authorizationSteps.clickButtonSignIn();
             mainSteps.showTitleNewsOnMain();
         }
-        activityScenarioRule.getScenario().onActivity(activity -> decorView = activity.getWindow().getDecorView());
+        activityScenarioRule.getScenario()
+                .onActivity(activity -> decorView = activity.getWindow().getDecorView());
     }
 
-    // Тест-кейсы для проведения функционального тестирования вкладки "Главная" (Main) мобильного приложения "Мобильный хоспис".
-
-    // TC - 12 - Переход на вкладку "Главная страница" (Main) через главное меню мобильного приложения "Мобильный хоспис"(Позитивный).
     @Test
     @Story("TC - 12")
-    @Description("Переход на вкладку \"Главная страница\" через главное меню")
+    @Description("Переход на вкладку 'Главная страница' через главное меню")
     public void Main() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        onView(isRoot())
+                .perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
         mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
-        onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
-        // Возврат на главную через Back вместо несуществующего метода
+        onView(withText(TestConstants.CommonTexts.NEWS))
+                .check(matches(isDisplayed()));
+        // возврат на главную через Back вместо несуществующего метода
         pressBack();
-        onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
+        onView(withText(TestConstants.CommonTexts.NEWS))
+                .check(matches(isDisplayed()));
     }
 
     // ТС - 13 - Свернуть/развернуть вкладку "Новости" (News) на вкладке "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).

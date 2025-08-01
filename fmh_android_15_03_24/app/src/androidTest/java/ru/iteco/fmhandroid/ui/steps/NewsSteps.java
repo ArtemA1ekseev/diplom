@@ -1,48 +1,67 @@
+// app/src/androidTest/java/ru/iteco/fmhandroid/ui/steps/NewsSteps.java
 package ru.iteco.fmhandroid.ui.steps;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static ru.iteco.fmhandroid.ui.data.DataHelper.waitDisplayed;
-
-import androidx.test.espresso.Espresso;
 
 import io.qameta.allure.kotlin.Allure;
 import ru.iteco.fmhandroid.ui.elements.NewsPage;
+import ru.iteco.fmhandroid.ui.data.DataHelper;
 
 public class NewsSteps {
 
-    NewsPage newsPage = new NewsPage();
+    private final NewsPage newsPage = new NewsPage();
 
+    /**
+     * Нажать на пункт "Новости" в главном меню
+     */
     public void clickButtonNews() {
-        Allure.step("Нажать на кнопку 'Новости'");
-        newsPage.newsButton.perform(click());
+        Allure.step("Нажать на пункт 'Новости' в главном меню");
+        newsPage.mainMenuNewsItem.perform(click());
     }
 
-    // ДОБАВЛЕНО: Методы, которые вызываются в NewsControlPanelTest
-    public void waitForAllNewsBlockLoad(int timeout) {
-        Allure.step("Ожидание загрузки блока всех новостей");
-        Espresso.onView(isRoot()).perform(waitDisplayed(newsPage.getNewsContainerId(), timeout));
-    }
-
-    public void clickEditNewsButton() {
-        Allure.step("Нажать на кнопку редактирования новостей");
-        newsPage.editButton.perform(click());
-    }
-
-    public void verifyNewsPageIsDisplayed() {
-        Allure.step("Проверить отображение страницы новостей");
+    /**
+     * Проверить, что заголовок "Новости" отображается на экране
+     */
+    public void checkNewsTitle() {
+        Allure.step("Проверить отображение заголовка 'Новости'");
         newsPage.newsTitle.check(matches(isDisplayed()));
     }
 
-    public void clickFilterButton() {
-        Allure.step("Нажать на кнопку фильтра");
-        newsPage.filterButton.perform(click());
+    /**
+     * Нажать на кнопку "Все новости"
+     */
+    public void clickAllNewsButton() {
+        Allure.step("Нажать на кнопку 'Все новости'");
+        newsPage.allNewsButton.perform(click());
     }
 
-    public void clickSortButton() {
-        Allure.step("Нажать на кнопку сортировки");
-        newsPage.sortButton.perform(click());
+    /**
+     * Ожидание загрузки списка новостей
+     * @param timeout миллисекунды ожидания
+     */
+    public void waitForNewsList(int timeout) {
+        Allure.step("Ожидание загрузки списка новостей");
+        DataHelper.waitDisplayed(newsPage.getNewsListContainerId(), timeout);
+    }
+
+    /**
+     * Нажать на первую кнопку "Развернуть" в списке новостей
+     */
+    public void clickExpandFirstNews() {
+        Allure.step("Нажать на кнопку 'Развернуть' первой новости");
+        newsPage.expandNewsButtons.get(0).perform(click());
+    }
+
+    /**
+     * Проверить описание первой новости
+     * @param expectedText ожидаемый текст описания
+     */
+    public void checkFirstNewsDescription(String expectedText) {
+        Allure.step("Проверить описание первой новости");
+        newsPage.newsItemDescriptions.get(0)
+                .check(matches(withText(expectedText)))
+                .check(matches(isDisplayed()));
     }
 }
