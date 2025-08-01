@@ -63,7 +63,7 @@ public class NewsTest {
     @Story("TC - 14")
     @Description("Переход во вкладку Все новости (ALL NEWS) через главное меню мобильного приложения Мобильный хоспис (Позитивный).")
     public void transferToAllNewsThroughMainMenu() {
-        // ИСПРАВЛЕНО: используем правильные методы
+        // ИСПРАВЛЕНО: используем правильные методы и константы
         onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
         mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
@@ -76,7 +76,7 @@ public class NewsTest {
     @Story("TC - 15")
     @Description("Переход во вкладку Все новости (ALL NEWS) через вкладку Главная страница (Main) мобильного приложения Мобильный хоспис (Позитивный).")
     public void transferToAllNewsThroughMainPage() {
-        // ИСПРАВЛЕНО: используем правильные методы
+        // ИСПРАВЛЕНО: используем правильные методы и константы
         onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
         mainSteps.showButtonAllNews();
         mainSteps.clickButtonAllNews();
