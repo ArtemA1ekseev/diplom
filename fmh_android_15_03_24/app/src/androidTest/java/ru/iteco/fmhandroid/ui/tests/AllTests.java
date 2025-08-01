@@ -112,13 +112,14 @@ public class AllTests {
     @Story("TC - 12")
     @Description("Переход на вкладку \"Главная страница\" (Main) через главное меню мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void Main() {
-        // ИСПРАВЛЕНО: используем правильные методы
+        // ИСПРАВЛЕНО: используем правильные методы без вызова несуществующего clickButtonMain
         onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
         mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
-        mainSteps.clickMainMenuButton();
-        mainSteps.clickButtonMain();
+
+        // ИСПРАВЛЕНО: возвращаемся на главную страницу через Back вместо несуществующего метода
+        pressBack();
         onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
     }
 
