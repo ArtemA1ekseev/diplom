@@ -1,3 +1,4 @@
+// AuthorizationPage.java
 package ru.iteco.fmhandroid.ui.elements;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -14,19 +15,17 @@ import ru.iteco.fmhandroid.ui.data.TestConstants;
 
 public class AuthorizationPage {
 
-    public ViewInteraction getAuthorizationElementsButton;
-    public ViewInteraction getAuthorizationElementsLoginField;
-    public ViewInteraction getAuthorizationElementsPasswordField;
-    public ViewInteraction getAuthorizationElementsButtonExit;
-    public ViewInteraction getAuthorizationElementsButtonLogOut;
-    public ViewInteraction getAuthorizationElementsTextAuthorization;
+    public ViewInteraction enterButtonInteraction;
+    public ViewInteraction loginFieldInteraction;
+    public ViewInteraction passwordFieldInteraction;
+    public ViewInteraction exitButtonInteraction;
+    public ViewInteraction logOutButtonInteraction;
+    public ViewInteraction authorizationTextInteraction;
 
-    public int loginField;
     public int loginLayout;
-    public int enterButton;
-    public int authorizationImageButton;
+    public int enterButtonId;
+    public int authorizationImageButtonId;
 
-    // ИСПРАВЛЕНО: данные теперь используют константы
     public static String rightLogin;
     public static String rightPassword;
     public static String unregisteredLogin;
@@ -39,19 +38,29 @@ public class AuthorizationPage {
     public static String differentRegexPassword;
 
     public AuthorizationPage() {
-        getAuthorizationElementsButton = onView(withId(R.id.enter_button));
-        getAuthorizationElementsLoginField = onView(allOf(withHint("Login"), withParent(withParent(withId(R.id.login_text_input_layout)))));
-        getAuthorizationElementsPasswordField = onView(allOf(withHint("Password"), withParent(withParent(withId(R.id.password_text_input_layout)))));
-        getAuthorizationElementsButtonExit = onView(withId(R.id.authorization_image_button));
-        getAuthorizationElementsButtonLogOut = onView(allOf(withId(android.R.id.title), withText(TestConstants.CommonTexts.LOG_OUT)));
-        getAuthorizationElementsTextAuthorization = onView(allOf(withText(TestConstants.CommonTexts.AUTHORIZATION), withParent(withParent(withId(R.id.nav_host_fragment)))));
+        enterButtonInteraction = onView(withId(R.id.enter_button));
+        loginFieldInteraction = onView(allOf(
+                withHint("Login"),
+                withParent(withParent(withId(R.id.login_text_input_layout))))
+        );
+        passwordFieldInteraction = onView(allOf(
+                withHint("Password"),
+                withParent(withParent(withId(R.id.password_text_input_layout))))
+        );
+        exitButtonInteraction = onView(withId(R.id.authorization_image_button));
+        logOutButtonInteraction = onView(allOf(
+                withId(android.R.id.title),
+                withText(TestConstants.CommonTexts.LOG_OUT))
+        );
+        authorizationTextInteraction = onView(allOf(
+                withText(TestConstants.CommonTexts.AUTHORIZATION),
+                withParent(withParent(withId(R.id.nav_host_fragment))))
+        );
 
-        loginField = R.id.login_text_input_layout;
         loginLayout = R.id.login_text_input_layout;
-        enterButton = R.id.enter_button;
-        authorizationImageButton = R.id.authorization_image_button;
+        enterButtonId = R.id.enter_button;
+        authorizationImageButtonId = R.id.authorization_image_button;
 
-        // ИСПРАВЛЕНО: теперь данные используют константы из TestConstants
         rightLogin = TestConstants.LoginData.RIGHT_LOGIN;
         rightPassword = TestConstants.LoginData.RIGHT_PASSWORD;
         unregisteredLogin = TestConstants.LoginData.UNREGISTERED_LOGIN;
