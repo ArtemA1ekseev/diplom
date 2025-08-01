@@ -45,6 +45,17 @@ public class MainSteps {
         Espresso.onView(isRoot()).perform(waitDisplayed(mainPage.getAllNewsButtonId(), timeout));
     }
 
+    // ДОБАВЛЕНО: Методы, которые вызываются в тестах
+    public void showButtonAllNews() {
+        Allure.step("Показать кнопку 'Все новости'");
+        mainPage.allNewsButton.check(matches(isDisplayed()));
+    }
+
+    public void clickButtonAllNews() {
+        Allure.step("Нажать на кнопку 'Все новости'");
+        clickAllNews();
+    }
+
     // Методы для получения ID элементов
     public int getAllNewsButtonId() {
         return mainPage.getAllNewsButtonId();
@@ -52,5 +63,14 @@ public class MainSteps {
 
     public int getMainMenuButtonId() {
         return mainPage.getMainMenuButtonId();
+    }
+
+    // ДОБАВЛЕНО: Дополнительные методы для совместимости
+    public int getMainMenuButton() {
+        return getMainMenuButtonId();
+    }
+
+    public int getButtonToExpandNews() {
+        return mainPage.getExpandNewsButtonId();
     }
 }
