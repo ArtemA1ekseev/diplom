@@ -55,7 +55,6 @@ import static ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps.getTitleUnion;
 import android.view.View;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import org.hamcrest.Matchers;
@@ -70,15 +69,14 @@ import io.qameta.allure.kotlin.Flaky;
 import io.qameta.allure.kotlin.Story;
 import ru.iteco.fmhandroid.R;
 import ru.iteco.fmhandroid.ui.AppActivity;
+import ru.iteco.fmhandroid.ui.data.TestConstants;
 import ru.iteco.fmhandroid.ui.steps.AuthorizationSteps;
 import ru.iteco.fmhandroid.ui.steps.MainSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsControlPanelSteps;
 import ru.iteco.fmhandroid.ui.steps.NewsSteps;
 import ru.iteco.fmhandroid.ui.steps.ThematicQuoteSteps;
 
-
 @LargeTest
-//@RunWith(AndroidJUnit4.class)
 @RunWith(AllureAndroidJUnit4.class)
 public class AllTests {
 
@@ -87,6 +85,7 @@ public class AllTests {
     NewsSteps newsSteps = new NewsSteps();
     NewsControlPanelSteps newsControlPanelSteps = new NewsControlPanelSteps();
     ThematicQuoteSteps thematicQuoteSteps = new ThematicQuoteSteps();
+
     @Rule
     public ActivityScenarioRule<AppActivity> activityScenarioRule =
             new ActivityScenarioRule<>(AppActivity.class);
@@ -95,77 +94,82 @@ public class AllTests {
     @Before
     public void setUp() {
         try {
-            mainSteps.mainScreenLoad();
+            // ИСПРАВЛЕНО: заменено на существующий метод
+            mainSteps.showTitleNewsOnMain();
         } catch (Exception e) {
             authorizationSteps.fillLoginField(getLogin());
             authorizationSteps.fillPasswordField(getPassword());
             authorizationSteps.clickButtonSignIn();
-            mainSteps.mainScreenLoad();
+            mainSteps.showTitleNewsOnMain();
         }
         activityScenarioRule.getScenario().onActivity(activity -> decorView = activity.getWindow().getDecorView());
     }
 
     // Тест-кейсы для проведения функционального тестирования вкладки "Главная" (Main) мобильного приложения "Мобильный хоспис".
 
-    //   TC - 12 - Переход на вкладку "Главная страница" (Main) через главное меню мобильного приложения "Мобильный хоспис"(Позитивный).
+    // TC - 12 - Переход на вкладку "Главная страница" (Main) через главное меню мобильного приложения "Мобильный хоспис"(Позитивный).
     @Test
     @Story("TC - 12")
     @Description("Переход на вкладку \"Главная страница\" (Main) через главное меню мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void Main() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
-        onView(withText("News")).check(matches(isDisplayed()));
-        mainSteps.clickButtonMainMenu();
+        onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
+        mainSteps.clickMainMenuButton();
         mainSteps.clickButtonMain();
-        onView(withText("News")).check(matches(isDisplayed()));
+        onView(withText(TestConstants.CommonTexts.NEWS)).check(matches(isDisplayed()));
     }
 
-    //  ТС - 13 - Свернуть/развернуть вкладку "Новости" (News)  на  вкладке "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // ТС - 13 - Свернуть/развернуть вкладку "Новости" (News) на вкладке "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 13")
-    @Description("Свернуть/развернуть вкладку \"Новости\" (News)  на  вкладке \"Главная страница\" (Main) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
+    @Description("Свернуть/развернуть вкладку \"Новости\" (News) на вкладке \"Главная страница\" (Main) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void extendNews() {
+        // ИСПРАВЛЕНО: используем правильные методы
         onView(isRoot()).perform(waitDisplayed(mainSteps.getButtonToExpandNews(), 5000));
-        mainSteps.clickButtonToExpandNews();
-        mainSteps.clickButtonToExpandNews();
-        onView(withId(R.id.all_news_text_view)).check(matches(withText("ALL NEWS")));
+        mainSteps.clickExpandNewsButton();
+        mainSteps.clickExpandNewsButton();
+        onView(withId(R.id.all_news_text_view)).check(matches(withText(TestConstants.CommonTexts.ALL_NEWS_UPPER)));
     }
 
-    //  Тест-кейсы для проведения функционального тестирования вкладки "Новости" (News) мобильного приложения "Мобильный хоспис".
+    // Тест-кейсы для проведения функционального тестирования вкладки "Новости" (News) мобильного приложения "Мобильный хоспис".
 
-    //  TC - 14 - Переход во вкладку "Все новости" (ALL NEWS) через вкладку "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 14 - Переход во вкладку "Все новости" (ALL NEWS) через вкладку "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 14")
-    @Description(" Переход во вкладку Все новости (ALL NEWS) через главное меню мобильного приложения Мобильный хоспис (Позитивный).")
+    @Description("Переход во вкладку Все новости (ALL NEWS) через главное меню мобильного приложения Мобильный хоспис (Позитивный).")
     public void transferToAllNewsThroughMainMenu() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
-        onView(allOf(withText("News"),
+        onView(allOf(withText(TestConstants.CommonTexts.NEWS),
                 withParent(withParent(withId(R.id.container_list_news_include))))).check(matches(isDisplayed()));
     }
 
-
-    //  TC - 15 - Переход во вкладку "Все новости" (ALL NEWS) через вкладку "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 15 - Переход во вкладку "Все новости" (ALL NEWS) через вкладку "Главная страница" (Main) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 15")
     @Description("Переход во вкладку Все новости (ALL NEWS) через вкладку Главная страница (Main) мобильного приложения Мобильный хоспис (Позитивный).")
     public void transferToAllNewsThroughMainPage() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
         mainSteps.showButtonAllNews();
         mainSteps.clickButtonAllNews();
-        onView(allOf(withText("News"),
+        onView(allOf(withText(TestConstants.CommonTexts.NEWS),
                 withParent(withParent(withId(R.id.container_list_news_include))))).check(matches(isDisplayed()));
     }
 
-    //  ТC - 19 - Создание активной новости с категорией "Объявление" во вкладке "Панели управления" (Control panel) в мобильном приложении "Мобильный хоспис" (Позитивный).
+    // ТC - 19 - Создание активной новости с категорией "Объявление" во вкладке "Панели управления" (Control panel) в мобильном приложении "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 19")
     @Description("Создание активной новости с категорией \"Объявление\" во вкладке \"Панели управления\" (Control panel) в мобильном приложении \"Мобильный хоспис\" (Позитивный).")
     public void creationNewsInControlPaneAdvertisement() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -182,13 +186,14 @@ public class AllTests {
         newsControlPanelSteps.clickButtonToOkDeleteNews();
     }
 
-    //  ТC - 20 - Создание активной новости с категорией "Зарплата" во вкладке "Панели управления" (Control panel) в мобильном приложении "Мобильный хоспис" (Позитивный).
+    // ТC - 20 - Создание активной новости с категорией "Зарплата" во вкладке "Панели управления" (Control panel) в мобильном приложении "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 20")
     @Description("Создание активной новости с категорией \"Зарплата\" во вкладке \"Панели управления\" (Control panel) в мобильном приложении \"Мобильный хоспис\" (Позитивный).")
     public void creationNewsInControlPanelSecondCategory() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -205,14 +210,14 @@ public class AllTests {
         newsControlPanelSteps.clickButtonToOkDeleteNews();
     }
 
-
-    //  TC - 21 - Поле "Категория" (Category) пустое, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
+    // TC - 21 - Поле "Категория" (Category) пустое, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
     @Test
     @Story("TC - 21")
     @Description("Поле Категория (Category) пустое, при создании новости, во вкладке Панель управления (Control panel) мобильного приложения Мобильный хоспис (Негативный).")
     public void fieldCategoryEmptyCreationNewsInControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -222,19 +227,20 @@ public class AllTests {
         newsControlPanelSteps.clickButtonOkTimeCreatingNews();
         newsControlPanelSteps.fillDescriptionCreatingNews(getDescriptionDonations());
         newsControlPanelSteps.clickButtonSaveCreatingNews();
-        onView(withText("Fill empty fields"))
-                .inRoot(withDecorView(Matchers.not(decorView)))// Here you use decorView
+        onView(withText(TestConstants.NewsMessages.FILL_EMPTY_FIELDS))
+                .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
         pressBack();
     }
 
-    //  TC - 22 - Поле "Заголовок" (Title) пустое, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
+    // TC - 22 - Поле "Заголовок" (Title) пустое, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
     @Test
     @Story("TC - 22")
     @Description("Поле Заголовок (Title) пустое, при создании новости, во вкладке Панель управления (Control panel) мобильного приложения Мобильный хоспис (Негативный)")
     public void fieldTitleEmptyCreationNewsInControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -245,8 +251,8 @@ public class AllTests {
         newsControlPanelSteps.clickButtonOkTimeCreatingNews();
         newsControlPanelSteps.fillDescriptionCreatingNews(getDescriptionBirthday());
         newsControlPanelSteps.clickButtonSaveCreatingNews();
-        onView(withText("Fill empty fields"))
-                .inRoot(withDecorView(Matchers.not(decorView)))// Here you use decorView
+        onView(withText(TestConstants.NewsMessages.FILL_EMPTY_FIELDS))
+                .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
         pressBack();
     }
@@ -256,8 +262,9 @@ public class AllTests {
     @Story("TC - 23")
     @Description("Поле \"Дата публикации\" (Publication date) пустое, при создании новости, во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Негативный)")
     public void fieldDateEmptyCreationNewsInControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -266,19 +273,20 @@ public class AllTests {
         newsControlPanelSteps.clickButtonDateCreatingNextDate();
         newsControlPanelSteps.fillDescriptionCreatingNews(getDescriptionSalaryEnumerated());
         newsControlPanelSteps.clickButtonSaveCreatingNews();
-        onView(withText("Fill empty fields"))
-                .inRoot(withDecorView(Matchers.not(decorView)))// Here you use decorView
+        onView(withText(TestConstants.NewsMessages.FILL_EMPTY_FIELDS))
+                .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
         pressBack();
     }
 
-    //  ТC - 24 - Поле "Время" (Time) пустое, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
+    // ТC - 24 - Поле "Время" (Time) пустое, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
     @Test
     @Story("TC - 24")
     @Description("Поле \"Время\" (Time) пустое, при создании новости, во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Негативный)")
     public void fieldTimeEmptyCreationNewsInControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -287,19 +295,20 @@ public class AllTests {
         newsControlPanelSteps.clickButtonDateCreatingNextDate();
         newsControlPanelSteps.fillDescriptionCreatingNews(getDescriptionUnion());
         newsControlPanelSteps.clickButtonSaveCreatingNews();
-        onView(withText("Fill empty fields"))
-                .inRoot(withDecorView(Matchers.not(decorView)))// Here you use decorView
+        onView(withText(TestConstants.NewsMessages.FILL_EMPTY_FIELDS))
+                .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
         pressBack();
     }
 
-    //  ТC - 25 - Поле "Описание" (Description) пустое, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
+    // ТC - 25 - Поле "Описание" (Description) пустое, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
     @Test
     @Story("TC - 25")
     @Description("Поле \"Описание\" (Description) пустое, при создании новости, во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Негативный).")
     public void fieldDescriptionEmptyCreationNewsInControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -310,19 +319,20 @@ public class AllTests {
         newsControlPanelSteps.clickButtonTimeCreatingNews();
         newsControlPanelSteps.clickButtonOkTimeCreatingNews();
         newsControlPanelSteps.clickButtonSaveCreatingNews();
-        onView(withText("Fill empty fields"))
-                .inRoot(withDecorView(Matchers.not(decorView)))// Here you use decorView
+        onView(withText(TestConstants.NewsMessages.FILL_EMPTY_FIELDS))
+                .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
         pressBack();
     }
 
-    //  ТC - 26 - Ввод в поле "Категория" (Category) собственного названия категории, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
+    // ТC - 26 - Ввод в поле "Категория" (Category) собственного названия категории, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
     @Test
     @Story("TC - 26")
     @Description("Ввод в поле Категория (Category) собственного названия категории, при создании новости, во вкладке Панель управления (Control panel) мобильного приложения Мобильный хоспис (Негативный).")
     public void customCategoryName() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -333,19 +343,20 @@ public class AllTests {
         newsControlPanelSteps.clickButtonTimeCreatingNews();
         newsControlPanelSteps.clickButtonOkTimeCreatingNews();
         newsControlPanelSteps.clickButtonSaveCreatingNews();
-        onView(withText("Saving failed. Try again later."))
-                .inRoot(withDecorView(Matchers.not(decorView)))// Here you use decorView
+        onView(withText(TestConstants.NewsMessages.SAVING_FAILED))
+                .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
         pressBack();
     }
 
-    //  ТC - 27 - Поле "Категория" (Category) состоит из цифр, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
+    // ТC - 27 - Поле "Категория" (Category) состоит из цифр, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
     @Test
     @Story("TC - 27")
     @Description("Поле \"Категория\" (Category) состоит из цифр, при создании новости, во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Негативный).")
     public void fieldCategoryConsistsOfNumbers() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -356,19 +367,20 @@ public class AllTests {
         newsControlPanelSteps.clickButtonOkTimeCreatingNews();
         newsControlPanelSteps.fillDescriptionCreatingNews(getNumbersCategoryDescription());
         newsControlPanelSteps.clickButtonSaveCreatingNews();
-        onView(withText("Saving failed. Try again later."))
-                .inRoot(withDecorView(Matchers.not(decorView)))// Here you use decorView
+        onView(withText(TestConstants.NewsMessages.SAVING_FAILED))
+                .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
         pressBack();
     }
 
-    //  ТC - 28 - Поле "Категория" (Category) состоит из спецсимволов, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
+    // ТC - 28 - Поле "Категория" (Category) состоит из спецсимволов, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Негативный).
     @Test
     @Story("TC - 28")
     @Description("Поле \"Категория\" (Category) состоит из спецсимволов, при создании новости, во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Негативный).")
     public void fieldCategoryConsistsOfSpecialCharacters() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы и константы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -379,19 +391,20 @@ public class AllTests {
         newsControlPanelSteps.clickButtonOkTimeCreatingNews();
         newsControlPanelSteps.fillDescriptionCreatingNews(getSpecialCharactersCategoryDescription());
         newsControlPanelSteps.clickButtonSaveCreatingNews();
-        onView(withText("Saving failed. Try again later."))
-                .inRoot(withDecorView(Matchers.not(decorView)))// Here you use decorView
+        onView(withText(TestConstants.NewsMessages.SAVING_FAILED))
+                .inRoot(withDecorView(Matchers.not(decorView)))
                 .check(matches(isDisplayed()));
         pressBack();
     }
 
-    //  ТC - 29 - Поле "Дата публикации" (Publication date) состоит из даты будущего года, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // ТC - 29 - Поле "Дата публикации" (Publication date) состоит из даты будущего года, при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 29")
     @Description("Поле \"Дата публикации\" (Publication date) состоит из даты будущего года, при создании новости, во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Позитивный)")
     public void fieldDateConsistsOfNextYearDate() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -407,13 +420,14 @@ public class AllTests {
         newsControlPanelSteps.clickButtonToOkDeleteNews();
     }
 
-    //  TC - 30 - Ручной ввод времени в поле "Время" (Time), при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 30 - Ручной ввод времени в поле "Время" (Time), при создании новости, во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 30")
     @Description("TC - 30 - Ручной ввод времени в поле \"Время\" (Time), при создании новости, во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void manualInputTime() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -431,40 +445,43 @@ public class AllTests {
         newsControlPanelSteps.clickButtonToOkDeleteNews();
     }
 
-    //  TC - 32 - Сортировка новостей во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 32 - Сортировка новостей во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Flaky
     @Story("TC - 32")
     @Description("Сортировка новостей во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void sortingNewsControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickButtonSortingNews();
         onView(withIndex(withId(R.id.news_item_publication_date_text_view), 0)).check(matches(withText("19.03.2025")));
     }
 
-    //   TC - 33 - Просмотр новостей во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 33 - Просмотр новостей во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 33")
     @Description(" TC - 33 - Просмотр новостей во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void watchingNewsControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickButtonToExpandNews();
         onView(withIndex(withId(R.id.news_item_description_text_view), 0)).check(matches(isDisplayed()));
     }
 
-    //  TC - 34 - Удаление активной новости во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 34 - Удаление активной новости во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 34")
     @Description("Удаление активной новости во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void deletingNewsControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickAddNews();
@@ -482,13 +499,14 @@ public class AllTests {
         onView(Matchers.allOf(withId(R.id.news_item_title_text_view), withText("За пожертвования"))).check(doesNotExist());
     }
 
-    //  TC - 35 - Редактирование новости во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 35 - Редактирование новости во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 35")
     @Description("Редактирование новости во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void editingNewsControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickButtonToEditNews();
@@ -501,13 +519,14 @@ public class AllTests {
         pressBack();
     }
 
-    //  TC - 36 - Смена статуса новости, находящейся в статусе "АКТИВНА" (Active), на статус "НЕ АКТИВНА" (Not active), во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 36 - Смена статуса новости, находящейся в статусе "АКТИВНА" (Active), на статус "НЕ АКТИВНА" (Not active), во вкладке "Панель управления" (Control panel) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 36")
     @Description("Смена статуса новости, находящейся в статусе \"АКТИВНА\" (Active), на статус \"НЕ АКТИВНА\" (Not active), во вкладке \"Панель управления\" (Control panel) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void changingStatusNewsControlPanel() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         newsSteps.clickButtonNews();
         newsControlPanelSteps.clickButtonControlPanel();
         newsControlPanelSteps.clickButtonToEditNews();
@@ -521,8 +540,7 @@ public class AllTests {
         newsControlPanelSteps.clickButtonToOkDeleteNews();
     }
 
-
-    //  ТC - 52 - Развернуть/свернуть тематическую цитату, во вкладке "Love is all", мобильного приложения "Мобильный хоспис" (Позитивный).
+    // ТC - 52 - Развернуть/свернуть тематическую цитату, во вкладке "Love is all", мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 52")
     @Description("Развернуть/свернуть тематическую цитату, во вкладке \"Love is all\", мобильного приложения \"Мобильный хоспис\" (Позитивный).")

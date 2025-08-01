@@ -12,7 +12,6 @@ import static ru.iteco.fmhandroid.ui.steps.AuthorizationSteps.getPassword;
 import android.content.Intent;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import org.junit.After;
@@ -31,9 +30,7 @@ import ru.iteco.fmhandroid.ui.steps.AuthorizationSteps;
 import ru.iteco.fmhandroid.ui.steps.MainSteps;
 
 @LargeTest
-//@RunWith(AndroidJUnit4.class)
 @RunWith(AllureAndroidJUnit4.class)
-
 @Epic("Тест-кейсы для проведения функционального тестирования вкладки \"О приложении\" (About) мобильного приложения \"Мобильный хоспис\".")
 public class AboutTest {
     AuthorizationSteps authorizationSteps = new AuthorizationSteps();
@@ -41,18 +38,19 @@ public class AboutTest {
     MainSteps mainSteps = new MainSteps();
 
     @Rule
-    public IntentsTestRule intentsTestRule =
-            new IntentsTestRule(AppActivity.class);
+    public IntentsTestRule<AppActivity> intentsTestRule =
+            new IntentsTestRule<>(AppActivity.class);
 
     @Before
     public void setUp() {
         try {
-            mainSteps.mainScreenLoad();
+            // ИСПРАВЛЕНО: заменено на существующий метод
+            mainSteps.showTitleNewsOnMain();
         } catch (Exception e) {
             authorizationSteps.fillLoginField(getLogin());
             authorizationSteps.fillPasswordField(getPassword());
             authorizationSteps.clickButtonSignIn();
-            mainSteps.mainScreenLoad();
+            mainSteps.showTitleNewsOnMain();
         }
     }
 
@@ -61,27 +59,28 @@ public class AboutTest {
         aboutSteps.clickButtonPressBack();
     }
 
-
-    //  TC - 53 - Просмотр ссылки "Политика конфиденциальности" (Privacy policy) во вкладке "О приложении" (About) мобильного приложения "Мобильный хоспис"(Позитивный).
+    // TC - 53 - Просмотр ссылки "Политика конфиденциальности" (Privacy policy) во вкладке "О приложении" (About) мобильного приложения "Мобильный хоспис"(Позитивный).
     @Test
     @Story("TC - 53")
     @Description("Просмотр ссылки \"Политика конфиденциальности\" (Privacy policy) во вкладке \"О приложении\" (About) мобильного приложения \"Мобильный хоспис\" (Позитивный)")
     public void watchingPrivacyPolicy() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         aboutSteps.clickButtonAboutMainMenu();
         aboutSteps.clickButtonPrivacyPolicy();
         intended(hasData("https://vhospice.org/#/privacy-policy/")); // Проверка Intent
         intended(hasAction(Intent.ACTION_VIEW));
     }
 
-    //  TC - 54 - Просмотр ссылки "Пользовательское соглашение"  (Terms of use) во вкладке "О приложении" (About) мобильного приложения "Мобильный хоспис" (Позитивный).
+    // TC - 54 - Просмотр ссылки "Пользовательское соглашение" (Terms of use) во вкладке "О приложении" (About) мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
-    @Story("TC - 53")
-    @Description("Просмотр ссылки \"Пользовательское соглашение\"  (Terms of use) во вкладке \"О приложении\" (About) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
+    @Story("TC - 54")
+    @Description("Просмотр ссылки \"Пользовательское соглашение\" (Terms of use) во вкладке \"О приложении\" (About) мобильного приложения \"Мобильный хоспис\" (Позитивный).")
     public void watchingTermsOfUse() {
-        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButton(), 5000));
-        mainSteps.clickButtonMainMenu();
+        // ИСПРАВЛЕНО: используем правильные методы
+        onView(isRoot()).perform(waitDisplayed(mainSteps.getMainMenuButtonId(), 5000));
+        mainSteps.clickMainMenuButton();
         aboutSteps.clickButtonAboutMainMenu();
         aboutSteps.clickButtonTermsOfUse();
         intended(hasData("https://vhospice.org/#/terms-of-use")); // Проверка Intent

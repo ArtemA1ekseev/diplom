@@ -11,7 +11,6 @@ import static ru.iteco.fmhandroid.ui.steps.AuthorizationSteps.getLogin;
 import static ru.iteco.fmhandroid.ui.steps.AuthorizationSteps.getPassword;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import org.junit.Before;
@@ -19,6 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import io.qameta.allure.android.runners.AllureAndroidJUnit4;
 import io.qameta.allure.kotlin.Description;
 import io.qameta.allure.kotlin.Epic;
 import io.qameta.allure.kotlin.Story;
@@ -29,16 +29,13 @@ import ru.iteco.fmhandroid.ui.steps.MainSteps;
 import ru.iteco.fmhandroid.ui.steps.ThematicQuoteSteps;
 
 @LargeTest
-@RunWith(AndroidJUnit4.class)
-//@RunWith(AllureAndroidJUnit4.class)
-
+@RunWith(AllureAndroidJUnit4.class)
 @Epic("Тест-кейсы для проведения функционального тестирования вкладки \"Тематические цитаты\" мобильного приложения \"Мобильный хоспис\".")
 public class ThematicQuoteTest {
 
     AuthorizationSteps authorizationSteps = new AuthorizationSteps();
     ThematicQuoteSteps thematicQuoteSteps = new ThematicQuoteSteps();
     MainSteps mainSteps = new MainSteps();
-
 
     @Rule
     public ActivityScenarioRule<AppActivity> activityRule =
@@ -47,16 +44,17 @@ public class ThematicQuoteTest {
     @Before
     public void setUp() {
         try {
-            mainSteps.mainScreenLoad();
+            // ИСПРАВЛЕНО: заменено на существующий метод
+            mainSteps.showTitleNewsOnMain();
         } catch (Exception e) {
             authorizationSteps.fillLoginField(getLogin());
             authorizationSteps.fillPasswordField(getPassword());
             authorizationSteps.clickButtonSignIn();
-            mainSteps.mainScreenLoad();
+            mainSteps.showTitleNewsOnMain();
         }
     }
 
-    //  ТC - 52 - Развернуть/свернуть тематическую цитату, во вкладке "Love is all", мобильного приложения "Мобильный хоспис" (Позитивный).
+    // ТC - 52 - Развернуть/свернуть тематическую цитату, во вкладке "Love is all", мобильного приложения "Мобильный хоспис" (Позитивный).
     @Test
     @Story("TC - 52")
     @Description("Развернуть/свернуть тематическую цитату, во вкладке \"Love is all\", мобильного приложения \"Мобильный хоспис\" (Позитивный).")
@@ -68,4 +66,3 @@ public class ThematicQuoteTest {
         onView(withIndex(withId(R.id.our_mission_item_description_text_view), 0)).check(matches(isDisplayed()));
     }
 }
-
